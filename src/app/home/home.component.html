@@ -1,0 +1,19 @@
+<table
+  class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp"
+>
+  <tr>
+    <th class="mdl-data-table__cell--non-numeric">albumId</th>
+    <th class="mdl-data-table__cell--non-numeric">id</th>
+    <th class="mdl-data-table__cell--non-numeric">title</th>
+    <th>url</th>
+    <th class="mdl-data-table__cell--non-numeric">thumbnailUrl</th>
+  </tr>
+  <tr *ngFor="let photo of photos">
+    <td class="mdl-data-table__cell--non-numeric">{{photo.albumId}}</td>
+    <td class="mdl-data-table__cell--non-numeric">{{photo.id}}</td>
+    <td class="mdl-data-table__cell--non-numeric">{{photo.title}}</td>
+    <td>{{photo.url}}</td>
+    <td><img src="photo.thumbnailUrl"></td>
+  </tr>
+</table>
+
