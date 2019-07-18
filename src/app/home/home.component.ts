@@ -69,18 +69,42 @@ const UPDATE_PHOTO = gql`
 })
 export class HomeComponent implements OnInit {
 
-  page = 1;
+  photoNumber: number;
   photos: any[] = [];
 
   private query: QueryRef<any>;
 
   constructor(private apollo: Apollo) {}
 
-  ngOnInit() {
-    // this.query = this.apollo.watchQuery({
-    //   query: PHOTO_QUERY,
-    //   variables: { id: 1 }
-    // });
+  save(){
+    this.apollo.mutate({
+      mutation: CREATE_PHOTO,
+      variables: {
+        data: {
+              albumId: this.photoNumber,
+              title: 'teste ' + this.photoNumber.toString(),
+              url: 'teste ' + this.photoNumber.toString(),
+              thumbnailUrl: null
+              }
+      }
+    }).subscribe(result => this.photos.push(result.data.createPhotoMock) );
+  }
+
+  update(){
+    this.apollo.mutate({
+      mutation: UPDATE_PHOTO,
+      variables: {
+        data: {
+          albumId: this.photoNumber * 10,
+          title: 'teste X ' + this.photoNumber.toString(),
+          url: 'teste X ' + this.photoNumber.toString(),
+          thumbnailUrl: null
+          },
+        where: {
+              id: this.photoNumber
+              }
+      }
+    }).subscribe();
 
     this.query = this.apollo.watchQuery({
       query: PHOTOS_QUERY
@@ -93,41 +117,44 @@ export class HomeComponent implements OnInit {
       this.photos = result.data.getPhotosMock;
     });
 
-    this.apollo.mutate({
-      mutation: CREATE_PHOTO,
-      variables: {
-        data: {
-              albumId: 4,
-              title: 'teste 4',
-              url: 'teste 4',
-              thumbnailUrl: null
-              }
-      }
-    }).subscribe();
+  }
 
+  delete(){
     this.apollo.mutate({
       mutation: DELETE_PHOTO,
       variables: {
         where: {
-              id: 1
+              id: this.photoNumber
               }
       }
-    }).subscribe();
+    }).subscribe( result =>
 
-    this.apollo.mutate({
-      mutation: UPDATE_PHOTO,
-      variables: {
-        data: {
-          albumId: 5,
-          title: 'teste 5',
-          url: 'teste 5',
-          thumbnailUrl: null
-          },
-        where: {
-              id: 300
-              }
-      }
-    }).subscribe();
+        {
+          this.query = this.apollo.watchQuery({
+            query: PHOTOS_QUERY
+          });
+
+          this.query.valueChanges.subscribe(resultQuery => {
+            this.photos = resultQuery.data.getPhotosMock;
+          });
+
+
+        }
+
+
+    );
+
+
+
+  }
+
+  ngOnInit() {
+    // this.query = this.apollo.watchQuery({
+    //   query: PHOTO_QUERY,
+    //   variables: { id: 1 }
+    // });
+
+    this.photoNumber = 1;
 
     this.query = this.apollo.watchQuery({
       query: PHOTOS_QUERY
