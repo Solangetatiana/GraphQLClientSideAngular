@@ -1,21 +1,23 @@
 <input type="number" [(ngModel)]="photoNumber" step="1">
-<input type="button" value="Save" (click)="save()">
-<input type="button" value="Delete" (click)="delete()">
-<input type="button" value="Update x 10" (click)="update()">
-<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+<input class="button" type="button" value="Save" (click)="save()">
+<input class="button" type="button" value="Delete" (click)="delete()">
+<input class="button" type="button" value="Update x 10" (click)="update()">
+<input class="button" type="button" value="read" (click)="read()">
+<p>
+<table >
   <tr>
-    <th class="mdl-data-table__cell--non-numeric">albumId</th>
-    <th class="mdl-data-table__cell--non-numeric">id</th>
-    <th class="mdl-data-table__cell--non-numeric">title</th>
-    <th class="mdl-data-table__cell--non-numeric">url</th>    
-    <th class="mdl-data-table__cell--non-numeric">thumbnailUrl</th>
+    <th >id</th>
+    <th >albumId</th>
+    <th >title</th>
+    <th >url</th>    
+    <th >thumbnailUrl</th>
   </tr>
   <tr *ngFor="let photo of photos">
-    <td class="mdl-data-table__cell--non-numeric">{{photo.albumId}}</td>
-    <td class="mdl-data-table__cell--non-numeric">{{photo.id}}</td>
-    <td class="mdl-data-table__cell--non-numeric">{{photo.title}}</td>
-    <td class="mdl-data-table__cell--non-numeric">{{photo.url}}</td>    
-    <td class="mdl-data-table__cell--non-numeric">{{photo.thumbnailUrl}}</td>        
+    <td >{{photo.id}}</td>    
+    <td >{{photo.albumId}}</td>
+    <td >{{photo.title}}</td>
+    <td >{{photo.url}}</td>    
+    <td >{{photo.thumbnailUrl}}</td>        
   </tr>
 </table>
 

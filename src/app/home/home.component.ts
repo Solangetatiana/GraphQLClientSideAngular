@@ -76,7 +76,7 @@ export class HomeComponent implements OnInit {
 
   constructor(private apollo: Apollo) {}
 
-  save(){
+  save() {
     this.apollo.mutate({
       mutation: CREATE_PHOTO,
       variables: {
@@ -90,7 +90,7 @@ export class HomeComponent implements OnInit {
     }).subscribe(result => this.photos.push(result.data.createPhotoMock) );
   }
 
-  update(){
+  update() {
     this.apollo.mutate({
       mutation: UPDATE_PHOTO,
       variables: {
@@ -104,8 +104,32 @@ export class HomeComponent implements OnInit {
               id: this.photoNumber
               }
       }
-    }).subscribe();
+    }).subscribe( result => {
+      console.log (result.data.updatePhotoMock);
 
+    }
+  );
+  }
+
+  delete() {
+    this.apollo.mutate({
+      mutation: DELETE_PHOTO,
+      variables: {
+        where: {
+              id: this.photoNumber
+              }
+      }
+    }).subscribe( result => {
+        console.log (result.data.deletePhotoMock.id);
+        const	indice	=	this.photos.findIndex(photo	=>	photo.id	==	result.data.deletePhotoMock.id);
+        if (indice	>=	0) {
+          return	this.photos.splice(indice,	1)[0];
+        }
+      }
+    );
+  }
+
+  read() {
     this.query = this.apollo.watchQuery({
       query: PHOTOS_QUERY
     });
@@ -116,36 +140,6 @@ export class HomeComponent implements OnInit {
       console.log (result.data.getPhotosMock);
       this.photos = result.data.getPhotosMock;
     });
-
-  }
-
-  delete(){
-    this.apollo.mutate({
-      mutation: DELETE_PHOTO,
-      variables: {
-        where: {
-              id: this.photoNumber
-              }
-      }
-    }).subscribe( result =>
-
-        {
-          this.query = this.apollo.watchQuery({
-            query: PHOTOS_QUERY
-          });
-
-          this.query.valueChanges.subscribe(resultQuery => {
-            this.photos = resultQuery.data.getPhotosMock;
-          });
-
-
-        }
-
-
-    );
-
-
-
   }
 
   ngOnInit() {
@@ -156,16 +150,7 @@ export class HomeComponent implements OnInit {
 
     this.photoNumber = 1;
 
-    this.query = this.apollo.watchQuery({
-      query: PHOTOS_QUERY
-    });
-
-    this.query.valueChanges.subscribe(result => {
-      console.log (result);
-      console.log (result.data);
-      console.log (result.data.getPhotosMock);
-      this.photos = result.data.getPhotosMock;
-    });
+    this.read();
 
   }
 
